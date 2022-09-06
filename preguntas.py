@@ -22,7 +22,8 @@ def pregunta_01():
     40
 
     """
-    return
+    l = len(tbl0)
+    return l
 
 
 def pregunta_02():
@@ -33,7 +34,8 @@ def pregunta_02():
     4
 
     """
-    return
+    f,c = tbl0.shape
+    return c
 
 
 def pregunta_03():
@@ -50,7 +52,9 @@ def pregunta_03():
     Name: _c1, dtype: int64
 
     """
-    return
+    result = tbl0.iloc[:,1]
+    y = result.value_counts()
+    return y.sort_index()
 
 
 def pregunta_04():
@@ -65,7 +69,7 @@ def pregunta_04():
     E    4.785714
     Name: _c2, dtype: float64
     """
-    return
+    return tbl0.groupby('_c1').mean()['_c2']
 
 
 def pregunta_05():
