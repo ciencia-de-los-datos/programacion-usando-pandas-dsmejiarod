@@ -86,7 +86,7 @@ def pregunta_05():
     E    9
     Name: _c2, dtype: int64
     """
-    return
+    return tbl0.groupby('_c1').max()['_c2']
 
 
 def pregunta_06():
@@ -98,7 +98,11 @@ def pregunta_06():
     ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 
     """
-    return
+    def mayus (x):
+        y = x.upper()
+        return y
+    y = list(tbl1['_c4'].apply(mayus).unique())
+    return sorted(y)
 
 
 def pregunta_07():
@@ -114,7 +118,7 @@ def pregunta_07():
     E    67
     Name: _c2, dtype: int64
     """
-    return
+    return tbl0.groupby('_c1').sum()['_c2']
 
 
 def pregunta_08():
@@ -132,7 +136,9 @@ def pregunta_08():
     39   39   E    5  1998-01-26    44
 
     """
-    return
+    tbl0['suma'] = tbl0['_c0'] + tbl0['_c2']
+
+    return tbl0
 
 
 def pregunta_09():
@@ -150,7 +156,11 @@ def pregunta_09():
     39   39   E    5  1998-01-26  1998
 
     """
-    return
+    def recorte(s):
+        y =  s[0:4]
+        return y
+    tbl0['year'] = tbl0.iloc[:,3].apply(recorte)
+    return tbl0
 
 
 def pregunta_10():
@@ -167,7 +177,12 @@ def pregunta_10():
     3   D                  1:2:3:5:5:7
     4   E  1:1:2:3:3:4:5:5:5:6:7:8:8:9
     """
-    return
+    from functools import reduce
+  
+    def sumar(series):
+        return reduce(lambda x, y: str(x)+ ':' + str(y), series)
+    y = tbl0.sort_values('_c2')
+    return y.groupby('_c1').agg({'_c2':sumar})
 
 
 def pregunta_11():
@@ -186,7 +201,12 @@ def pregunta_11():
     38   38      d,e
     39   39    a,d,f
     """
-    return
+    from functools import reduce
+    def sumar_com(series):
+        return reduce(lambda x, y: x+ ',' + y, series)
+    y = tbl1.sort_values(['_c0','_c4'])
+    x = y.groupby('_c0').agg({'_c4':sumar_com}).reset_index()
+    return x
 
 
 def pregunta_12():
@@ -204,7 +224,13 @@ def pregunta_12():
     38   38                    eee:0,fff:9,iii:2
     39   39                    ggg:3,hhh:8,jjj:5
     """
-    return
+    from functools import reduce
+    tbl2['_c5'] = tbl2['_c5a'] +':' +tbl2['_c5b'].apply(str)
+    def sumar_com(series):
+        return reduce(lambda x, y: x+ ',' + y, series)
+    y = tbl2.sort_values(['_c0','_c5'])
+    x = y.groupby('_c0').agg({'_c5':sumar_com}).reset_index()
+    return x
 
 
 def pregunta_13():
@@ -221,4 +247,5 @@ def pregunta_13():
     E    275
     Name: _c5b, dtype: int64
     """
-    return
+    y = tbl0.merge(tbl2,how ='inner').groupby('_c1').sum()
+    return y['_c5b']
